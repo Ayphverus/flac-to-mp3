@@ -26,6 +26,6 @@ for root, subfolders, files in os.walk(walkroot):
 			except FileExistsError:   # If the directory already exists, ignore error
 				pass
 			print("Converting", file)
-			os.system("ffmpeg -y -loglevel warning -i {} -q:a 0 -map_metadata 0 -id3v2_version 3 {}".format(quote(inpath), outPath))
+			os.system("ffmpeg -y -loglevel warning -i {} -q:a 0 -map_metadata 0 -id3v2_version 3 {}".format(quote(inpath), quote(outPath)))
 			print("Done")
 
