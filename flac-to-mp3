@@ -1,0 +1,30 @@
+#!/usr/bin/python3
+
+import sys
+import os
+
+# Assume current directory if none given
+walkroot = '.' if len(sys.argv) < 2 else sys.argv[1]
+
+for root, subfolders, files in os.walk(walkroot):
+	for file in files:
+		# Input file path
+		inpath = os.path.join(root, file)
+		
+		# Output file path
+		splitpath = inpath.split(os.sep)   # List of directories
+		splitpath.insert(1, "MP3")   # Put everything in walkroot/MP3/
+		# Change extension to .mp3
+		name, extension = os.path.splitext(splitpath[-1])
+		splitpath[-1] = name + ".mp3"
+		outPath = os.path.join(*splitpath)
+
+		if file.endswith(".flac"):
+			try:
+				os.makedirs(os.path.split(outPath)[0])
+			except FileExistsError:   # If the directory already exists, ignore error
+				pass
+			print("Converting", file)
+			os.system("ffmpeg -y -loglevel warning -i {} -q:a 0 -map_metadata 0 -id3v2_version 3 {}".format(inpath, outPath))
+			print("Done")
+
