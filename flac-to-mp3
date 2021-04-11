@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import sys
+import subprocess
 import os
 from shlex import quote
 
@@ -26,6 +27,7 @@ for root, subfolders, files in os.walk(walkroot):
 			except FileExistsError:   # If the directory already exists, ignore error
 				pass
 			print("Converting", file)
-			os.system("ffmpeg -y -loglevel warning -i {} -q:a 0 -map_metadata 0 -id3v2_version 3 {}".format(quote(inpath), quote(outPath)))
+			cmdString = "ffmpeg -i {} -ab 320k -map_metadata 0 -id3v2_version 3 {}".format(quote(inpath), quote(outPath))
+			p = subprocess.Popen(["powershell.exe", cmdString], stdout=sys.stdout)
+			p.communicate()
 			print("Done")
-
